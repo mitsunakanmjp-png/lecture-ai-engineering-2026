@@ -17,7 +17,14 @@
 
 ## 宿題
 
-- 取り組んだレベル：基礎 / 実装 / 発展
+- 取り組んだレベル：基礎
+
 - やったこと：
+`app/agent.py`の`INSTRUCTIONS`を1箇所だけ変更し、「質問に複数の用語が含まれる場合は、用語ごとに個別に検索する」と追加した。変更前後で同じ質問「LoRAとQLoRAの違いは？」を`--trace`付きで実行した。
+
 - 結果：
+変更前は`search_glossary({'query': 'LoRA'})`の1回だけで、`requests=2`、`tool_calls=1`だった。
+変更後は`search_glossary({'query': 'LoRA'})`と`search_glossary({'query': 'QLoRA'})`の2回が呼ばれ、`requests=2`、`tool_calls=2`だった。変更後の回答では、両方の用語について用語集の定義を参照していた。
+
 - 気づき・疑問：
+指示を変えると、最終回答までのLLMリクエスト数は同じでも、ツールの呼び出し方と用語集から得る結果が変わった。複数のツール呼び出しを1回のLLM応答でまとめて要求できるため、`requests`と`tool_calls`は別の数になる。
